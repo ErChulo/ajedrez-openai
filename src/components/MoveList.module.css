@@ -1,0 +1,47 @@
+/* ===== Move List ===== */
+.moveList {
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: 'SF Mono', 'Consolas', monospace;
+  font-size: 0.8rem;
+}
+
+.moveList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.moveList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.moveList::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.moveRow {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+.moveRow:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.moveNum {
+  color: var(--text-secondary);
+  width: 24px;
+  text-align: right;
+}
+
+.moveWhite, .moveBlack {
+  width: 60px;
+  padding: 0.125rem 0.375rem;
+  border-radius: 3px;
+  cursor: default;
+}
+
+.moveWhite:hover, .moveBlack:hover {
+  background: var(--bg-hover);
+}

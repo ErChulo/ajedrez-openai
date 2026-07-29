@@ -1,0 +1,51 @@
+/* ===== Clock Display ===== */
+.clockDisplay {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.activeClock {
+  border-color: var(--accent);
+  background: rgba(212, 168, 67, 0.1);
+}
+
+.clockName {
+  font-size: 0.85rem;
+  font-weight: 500;
+  min-width: 80px;
+}
+
+.clockTime {
+  font-family: 'SF Mono', 'Consolas', monospace;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 70px;
+  text-align: right;
+}
+
+.activeClock .clockTime {
+  color: var(--accent);
+}
+
+.clockIndicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+}
+
+.activeClock .clockIndicator {
+  background: var(--accent);
+  animation: pulse 1.5s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
