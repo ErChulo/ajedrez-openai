@@ -248,11 +248,10 @@ export function GamePage() {
               {/* Promotion picker */}
               {game.showPromotion && (
                 <div className={styles.promotionOverlay}>
-                  <PromotionPicker
-                    side={humanSide}
-                    pieceStyle={pieceStyle}
-                    onSelect={game.handlePromotionChoice}
-                  />
+            <PromotionPicker
+              side={humanSide}
+              onSelect={game.handlePromotionChoice}
+            />
                 </div>
               )}
             </div>

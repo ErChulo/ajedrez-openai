@@ -23,7 +23,7 @@ function renderAssetPiece(sym: PieceSymbol): string {
   const isWhite = sym === sym.toUpperCase()
   const side = isWhite ? 'w' : 'b'
   const piece = ASSET_PIECE_NAME[sym.toLowerCase()] ?? 'Pawn'
-  return `<img src="/assets/2d-pieces/unknuffig/${side}_${piece}.png" alt="" aria-hidden="true" draggable="false" data-piece-art="unknuffig" />`
+  return `<img src="${import.meta.env.BASE_URL}assets/2d-pieces/unknuffig/${side}_${piece}.png" alt="" aria-hidden="true" draggable="false" data-piece-art="unknuffig" />`
 }
 
 export const PIECE_STYLE_META: Record<PieceStyleId, { id: PieceStyleId; name: string; blurb: string }> = {

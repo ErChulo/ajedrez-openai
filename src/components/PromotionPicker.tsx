@@ -1,12 +1,10 @@
 // Promotion picker — shows piece options when a pawn reaches the last rank.
 
-import type { Promotion, Side, PieceSymbol, PieceStyleId } from '@/types'
-import { renderPieceSvg, PIECE_STYLE_META } from '@/renderers/board2d/piece-styles'
+import type { Promotion, Side, PieceSymbol } from '@/types'
 import styles from './PromotionPicker.module.css'
 
 interface PromotionPickerProps {
   side: Side
-  pieceStyle: PieceStyleId
   onSelect: (choice: Promotion | null) => void
 }
 
@@ -17,7 +15,7 @@ const PIECE_OPTIONS: { promo: Promotion; symbol: PieceSymbol }[] = [
   { promo: 'n', symbol: 'N' },
 ]
 
-export function PromotionPicker({ side, pieceStyle, onSelect }: PromotionPickerProps) {
+export function PromotionPicker({ side, onSelect }: PromotionPickerProps) {
   const isWhite = side === 'white'
   const fill = isWhite ? '#f5f0e1' : '#2c2c2c'
   const stroke = isWhite ? '#333' : '#ccc'
@@ -27,34 +25,26 @@ export function PromotionPicker({ side, pieceStyle, onSelect }: PromotionPickerP
       className={styles.promotionOverlay}
       onClick={(e) => e.stopPropagation()}
     >
-      {PIECE_OPTIONS.map(({ promo, symbol }) => {
-        const isFullSvg = ['fantasy', 'merida', 'kaneo', 'chessnut', 'rhosgfx'].includes(pieceStyle)
-        const vb = PIECE_STYLE_META[pieceStyle].viewBox
-        return (
-          <button
-            key={promo}
-            onClick={(e) => {
-              e.stopPropagation()
-              onSelect(promo)
-            }}
-            className={styles.promoBtn}
-            aria-label={`Promote to ${symbol}`}
-          >
-            {isFullSvg ? (
-              <span
-                className={styles.promoBtnContent}
-                dangerouslySetInnerHTML={{ __html: renderPieceSvg(symbol as PieceSymbol, pieceStyle) }}
-              />
-            ) : (
-              <svg viewBox={vb} style={{ width: '100%', height: '100%' }}>
-                <g fill={fill} stroke={stroke} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d={PROMO_PATHS[symbol]} />
-                </g>
-              </svg>
-            )}
-          </button>
-        )
-      })}
+  {PIECE_OPTIONS.map(({ promo, symbol }) => {
+    const vb = '0 0 45 45'
+    return (
+      <button
+        key={promo}
+        onClick={(e) => {
+          e.stopPropagation()
+          onSelect(promo)
+        }}
+        className={styles.promoBtn}
+        aria-label={`Promote to ${symbol}`}
+      >
+        <svg viewBox={vb} style={{ width: '100%', height: '100%' }}>
+          <g fill={fill} stroke={stroke} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d={PROMO_PATHS[symbol]} />
+          </g>
+        </svg>
+      </button>
+    )
+  })}
       <button
         onClick={(e) => {
           e.stopPropagation()

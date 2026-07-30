@@ -64,12 +64,12 @@ const TARGET_HEIGHT_BY_KIND: Record<PieceKind, number> = {
 const PIECE_MAX_WIDTH = 0.18
 
 const STL_URL_BY_KIND: Record<PieceKind, string> = {
-  p: '/assets/3d-pieces/staunton/Pawn.stl',
-  n: '/assets/3d-pieces/staunton/Knight.stl',
-  b: '/assets/3d-pieces/staunton/Bishop.stl',
-  r: '/assets/3d-pieces/staunton/Rook.stl',
-  q: '/assets/3d-pieces/staunton/Queen.stl',
-  k: '/assets/3d-pieces/staunton/King.stl',
+  p: `${import.meta.env.BASE_URL}assets/3d-pieces/staunton/Pawn.stl`,
+  n: `${import.meta.env.BASE_URL}assets/3d-pieces/staunton/Knight.stl`,
+  b: `${import.meta.env.BASE_URL}assets/3d-pieces/staunton/Bishop.stl`,
+  r: `${import.meta.env.BASE_URL}assets/3d-pieces/staunton/Rook.stl`,
+  q: `${import.meta.env.BASE_URL}assets/3d-pieces/staunton/Queen.stl`,
+  k: `${import.meta.env.BASE_URL}assets/3d-pieces/staunton/King.stl`,
 }
 
 let stlLoader: STLLoader | null = null
@@ -135,12 +135,12 @@ export function prefetchStauntonGeometries(): Promise<void> {
 // ---- GLTF Sketchfab loader ----
 
 const GLTF_URL_BY_KIND: Record<PieceKind, string> = {
-  p: '/assets/3d-pieces/chess3d/pawn/scene.gltf',
-  n: '/assets/3d-pieces/chess3d/knight/scene.gltf',
-  b: '/assets/3d-pieces/chess3d/bishop/scene.gltf',
-  r: '/assets/3d-pieces/chess3d/rook/scene.gltf',
-  q: '/assets/3d-pieces/chess3d/queen/scene.gltf',
-  k: '/assets/3d-pieces/chess3d/king/scene.gltf',
+  p: `${import.meta.env.BASE_URL}assets/3d-pieces/chess3d/pawn/scene.gltf`,
+  n: `${import.meta.env.BASE_URL}assets/3d-pieces/chess3d/knight/scene.gltf`,
+  b: `${import.meta.env.BASE_URL}assets/3d-pieces/chess3d/bishop/scene.gltf`,
+  r: `${import.meta.env.BASE_URL}assets/3d-pieces/chess3d/rook/scene.gltf`,
+  q: `${import.meta.env.BASE_URL}assets/3d-pieces/chess3d/queen/scene.gltf`,
+  k: `${import.meta.env.BASE_URL}assets/3d-pieces/chess3d/king/scene.gltf`,
 }
 
 const GLTF_PIECE_HAS_TEXTURE: Record<PieceKind, boolean> = {
@@ -283,7 +283,7 @@ function buildStauntonMesh(kind: PieceKind, sym: PieceSymbol, material: THREE.Ma
   if (failedKindLoads.has(kind)) {
     return buildProceduralMesh(kind, sym, material, 'classic')
   }
-  loadKindGeometry(kind).catch(() => {})
+  loadKindGeometry(kind).catch((e) => console.warn('[staunton-fallback] load failed', kind, e))
   const placeholder = new THREE.Mesh(
     new THREE.CylinderGeometry(0.08, 0.10, TARGET_HEIGHT_BY_KIND[kind], 16),
     material,
@@ -315,7 +315,7 @@ function buildGltfMesh(kind: PieceKind, sym: PieceSymbol, fallbackMaterial: THRE
   if (failedGltfLoads.has(kind)) {
     return buildProceduralMesh(kind, sym, fallbackMaterial, 'classic')
   }
-  loadGltfGeometry(kind).catch(() => {})
+  loadGltfGeometry(kind).catch((e) => console.warn('[gltf-fallback] load failed', kind, e))
   const placeholder = new THREE.Mesh(
     new THREE.CylinderGeometry(0.08, 0.10, TARGET_HEIGHT_BY_KIND[kind], 16),
     fallbackMaterial,
@@ -437,9 +437,9 @@ export function buildPieceGeometry(kind: PieceKind, sym: PieceSymbol, material: 
     void loadKindGeometry(kind)
   }
   if (gltfCache.has(kind)) return buildGltfMesh(kind, sym, material)
-  if (styleId === 'asset-pack') loadChess3dGroup(kind).catch(() => {})
-  if (styleId === 'staunton') loadKindGeometry(kind).catch(() => {})
-  loadGltfGeometry(kind).catch(() => {})
+  if (styleId === 'asset-pack') loadChess3dGroup(kind).catch((e) => console.warn('[chess3d] load failed', kind, e))
+  if (styleId === 'staunton') loadKindGeometry(kind).catch((e) => console.warn('[staunton] load failed', kind, e))
+  loadGltfGeometry(kind).catch((e) => console.warn('[gltf] load failed', kind, e))
   return buildProceduralMesh(kind, sym, material, 'classic')
 }
 
