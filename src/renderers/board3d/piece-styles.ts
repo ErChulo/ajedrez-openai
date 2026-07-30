@@ -258,7 +258,7 @@ export function prefetchGltfGeometries(): Promise<void> {
 }
 
 export function prefetchPieceStyleAssets(styleId: PieceStyleId): Promise<void> {
-  if (styleId === 'chess3d') {
+  if (styleId === 'asset-pack') {
     const kinds: PieceKind[] = ['p', 'n', 'b', 'r', 'q', 'k']
     return Promise.all(kinds.map((k) => loadChess3dGroup(k).catch(() => undefined))).then(() => undefined)
   }
@@ -405,7 +405,7 @@ function buildChess3dModel(kind: PieceKind, sym: PieceSymbol, material: THREE.Ma
 
 function buildProceduralMesh(kind: PieceKind, sym: PieceSymbol, material: THREE.Material, styleId: PieceStyleId): THREE.Mesh {
   const cfg = (STYLE_CFG as Record<string, StyleCfg>)[styleId] ?? STYLE_CFG.classic
-  const profile = styleId === 'modern' ? modernPieceProfile(kind) : pieceProfile(kind)
+  const profile = pieceProfile(kind)
   const lathe = new THREE.LatheGeometry(profile, cfg.latheSegments)
   const host = new THREE.Mesh(lathe, material)
   ;(host.userData as { symbol: PieceSymbol }).symbol = sym
@@ -427,7 +427,7 @@ function buildProceduralMesh(kind: PieceKind, sym: PieceSymbol, material: THREE.
 }
 
 export function buildPieceGeometry(kind: PieceKind, sym: PieceSymbol, material: THREE.Material, styleId: PieceStyleId): THREE.Object3D {
-  if (styleId === 'chess3d') {
+  if (styleId === 'asset-pack') {
     const model = buildChess3dModel(kind, sym, material)
     if (model) return model
   }
@@ -437,7 +437,7 @@ export function buildPieceGeometry(kind: PieceKind, sym: PieceSymbol, material: 
     void loadKindGeometry(kind)
   }
   if (gltfCache.has(kind)) return buildGltfMesh(kind, sym, material)
-  if (styleId === 'chess3d') loadChess3dGroup(kind).catch(() => {})
+  if (styleId === 'asset-pack') loadChess3dGroup(kind).catch(() => {})
   if (styleId === 'staunton') loadKindGeometry(kind).catch(() => {})
   loadGltfGeometry(kind).catch(() => {})
   return buildProceduralMesh(kind, sym, material, 'classic')
@@ -817,43 +817,3 @@ function pieceProfile(kind: PieceKind): THREE.Vector2[] {
   }
 }
 
-function modernPieceProfile(kind: PieceKind): THREE.Vector2[] {
-  switch (kind) {
-    case 'p': return [
-      new THREE.Vector2(0.00, 0.00), new THREE.Vector2(0.18, 0.00), new THREE.Vector2(0.18, 0.03),
-      new THREE.Vector2(0.08, 0.05), new THREE.Vector2(0.08, 0.32), new THREE.Vector2(0.12, 0.36),
-      new THREE.Vector2(0.14, 0.42), new THREE.Vector2(0.14, 0.50), new THREE.Vector2(0.12, 0.58),
-      new THREE.Vector2(0.08, 0.62), new THREE.Vector2(0.00, 0.65),
-    ]
-    case 'b': return [
-      new THREE.Vector2(0.00, 0.00), new THREE.Vector2(0.20, 0.00), new THREE.Vector2(0.20, 0.04),
-      new THREE.Vector2(0.08, 0.06), new THREE.Vector2(0.08, 0.50), new THREE.Vector2(0.10, 0.60),
-      new THREE.Vector2(0.10, 0.80), new THREE.Vector2(0.08, 0.88), new THREE.Vector2(0.06, 0.92),
-      new THREE.Vector2(0.00, 0.95),
-    ]
-    case 'k': return [
-      new THREE.Vector2(0.00, 0.00), new THREE.Vector2(0.22, 0.00), new THREE.Vector2(0.22, 0.04),
-      new THREE.Vector2(0.09, 0.06), new THREE.Vector2(0.09, 0.72), new THREE.Vector2(0.12, 0.78),
-      new THREE.Vector2(0.14, 0.88), new THREE.Vector2(0.14, 1.00), new THREE.Vector2(0.12, 1.06),
-      new THREE.Vector2(0.00, 1.00),
-    ]
-    case 'q': return [
-      new THREE.Vector2(0.00, 0.00), new THREE.Vector2(0.22, 0.00), new THREE.Vector2(0.22, 0.04),
-      new THREE.Vector2(0.09, 0.06), new THREE.Vector2(0.09, 0.65), new THREE.Vector2(0.14, 0.74),
-      new THREE.Vector2(0.16, 0.86), new THREE.Vector2(0.14, 0.96), new THREE.Vector2(0.10, 1.02),
-      new THREE.Vector2(0.00, 1.06),
-    ]
-    case 'r': return [
-      new THREE.Vector2(0.00, 0.00), new THREE.Vector2(0.22, 0.00), new THREE.Vector2(0.22, 0.04),
-      new THREE.Vector2(0.09, 0.06), new THREE.Vector2(0.09, 0.60), new THREE.Vector2(0.14, 0.68),
-      new THREE.Vector2(0.16, 0.78), new THREE.Vector2(0.16, 0.92), new THREE.Vector2(0.14, 0.98),
-      new THREE.Vector2(0.00, 1.02),
-    ]
-    case 'n': return [
-      new THREE.Vector2(0.00, 0.00), new THREE.Vector2(0.20, 0.00), new THREE.Vector2(0.20, 0.04),
-      new THREE.Vector2(0.08, 0.06), new THREE.Vector2(0.08, 0.48), new THREE.Vector2(0.12, 0.56),
-      new THREE.Vector2(0.14, 0.64), new THREE.Vector2(0.14, 0.76), new THREE.Vector2(0.10, 0.84),
-      new THREE.Vector2(0.06, 0.88), new THREE.Vector2(0.00, 0.90),
-    ]
-  }
-}

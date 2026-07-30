@@ -60,10 +60,11 @@ export type GameStatus = 'playing' | 'checkmate' | 'stalemate' | 'draw' | 'resig
 export type RenderMode = '2d' | '3d'
 export type ThemeName = 'classic' | 'slate' | 'emerald' | 'neon'
 
-// Piece style picker
-export type PieceStyleId = 'classic' | 'bold' | 'outline' | 'filled' | 'minimal' | 'ornate' | 'staunton' | 'modern' | 'fantasy' | 'merida' | 'kaneo' | 'chessnut' | 'rhosgfx' | 'chess3d'
-export const PIECE_STYLE_IDS: readonly PieceStyleId[] = ['classic', 'bold', 'outline', 'filled', 'minimal', 'ornate', 'staunton', 'modern', 'fantasy', 'merida', 'kaneo', 'chessnut', 'rhosgfx', 'chess3d']
-export const DEFAULT_PIECE_STYLE: PieceStyleId = 'chess3d'
+// Piece style picker — eight canonical entries mirroring the sister repo.
+// Default = 'asset-pack' (Unknuffig 2D PNG + Sketchfab chess3d 3D GLTF).
+export type PieceStyleId = 'classic' | 'bold' | 'outline' | 'filled' | 'minimal' | 'ornate' | 'staunton' | 'asset-pack'
+export const PIECE_STYLE_IDS: readonly PieceStyleId[] = ['classic', 'bold', 'outline', 'filled', 'minimal', 'ornate', 'staunton', 'asset-pack']
+export const DEFAULT_PIECE_STYLE: PieceStyleId = 'asset-pack'
 
 export interface PieceStyleMeta {
   id: PieceStyleId

@@ -1,6 +1,12 @@
-// Multi-style SVG piece renderer.
-// Cburnett envelope styles (classic/bold/outline/filled/minimal/ornate/staunton)
-// plus full-SVG art sets (fantasy/merida/kaneo/chessnut/rhosgfx).
+// Multi-style 2D piece artwork registry.
+//
+// Eight canonical styles mirroring the sister repo:
+//   * classic/bold/outline/filled/minimal/ornate — Cburnett envelopes with
+//     different stroke / fill / shadow treatments.
+//   * staunton — same Cburnett envelope (real-geometry lives in the 3D path).
+//   * asset-pack — Unknuffig 2D PNG pieces (default).
+//
+// Only artwork is mirrored here. Movement/animation logic lives elsewhere.
 
 import type { PieceSymbol, PieceStyleId } from '@/types'
 
@@ -20,28 +26,15 @@ function renderAssetPiece(sym: PieceSymbol): string {
   return `<img src="/assets/2d-pieces/unknuffig/${side}_${piece}.png" alt="" aria-hidden="true" draggable="false" data-piece-art="unknuffig" />`
 }
 
-// ---- Full-SVG art set imports ----
-import { fantasyPieces, fantasyViewBox } from '@/piece-data/fantasy'
-import { meridaPieces, meridaViewBox } from '@/piece-data/merida'
-import { kaneoPieces, kaneoViewBox } from '@/piece-data/kaneo'
-import { chessnutPieces, chessnutViewBox } from '@/piece-data/chessnut'
-import { rhosgfxPieces, rhosgfxViewBox } from '@/piece-data/rhosgfx'
-
-export const PIECE_STYLE_META: Record<PieceStyleId, { id: PieceStyleId; name: string; blurb: string; viewBox: string }> = {
-  classic:  { id: 'classic', name: 'Classic Staunton', blurb: 'FIDE standard ivory/ebony with drop-shadow.', viewBox: '0 0 45 45' },
-  bold:     { id: 'bold', name: 'Bold', blurb: 'Heavier outlines, stronger shadow.', viewBox: '0 0 45 45' },
-  outline:  { id: 'outline', name: 'Outline', blurb: 'Fill removed, line-only — schematic etching.', viewBox: '0 0 45 45' },
-  filled:   { id: 'filled', name: 'Filled Silhouette', blurb: 'Stroke removed, pure silhouette with shadow.', viewBox: '0 0 45 45' },
-  minimal:  { id: 'minimal', name: 'Minimal Modern', blurb: 'Hairline stroke, soft shadow — sleek modern.', viewBox: '0 0 45 45' },
-  ornate:   { id: 'ornate', name: 'Ornate Carved', blurb: 'Classic + outer halo, pewter-carved look.', viewBox: '0 0 45 45' },
-  staunton: { id: 'staunton', name: 'Staunton Marble', blurb: 'Real MIT-licensed Staunton geometry (3D only — 2D falls back to Classic).', viewBox: '0 0 45 45' },
-  chess3d: { id: 'chess3d', name: 'Chess3D Sketchfab', blurb: 'Real GLTF Sketchfab model (3D only — 2D falls back to Classic).', viewBox: '0 0 45 45' },
-  modern:   { id: 'modern', name: 'Modern Minimal', blurb: 'Clean geometric shapes, no ornaments — sleek contemporary set.', viewBox: '0 0 45 45' },
-  fantasy:  { id: 'fantasy', name: 'Fantasy', blurb: 'Whimsical, gradient-rich, jewel-adorned. MIT.', viewBox: fantasyViewBox },
-  merida:   { id: 'merida', name: 'Merida', blurb: 'Classic typographic, angular tournament set. GPLv2+.', viewBox: meridaViewBox },
-  kaneo:    { id: 'kaneo', name: 'Kaneo', blurb: 'Bold rounded, Neo-inspired modern design. CC BY 4.0.', viewBox: kaneoViewBox },
-  chessnut: { id: 'chessnut', name: 'Chessnut', blurb: 'Intricate line-work, ornate embossed look. Apache 2.0.', viewBox: chessnutViewBox },
-  rhosgfx:  { id: 'rhosgfx', name: 'Rhosgfx', blurb: 'Warm-toned flat design, friendly tabletop feel. CC0.', viewBox: rhosgfxViewBox },
+export const PIECE_STYLE_META: Record<PieceStyleId, { id: PieceStyleId; name: string; blurb: string }> = {
+  classic:  { id: 'classic', name: 'Classic Staunton',  blurb: 'FIDE standard ivory/ebony with drop-shadow.' },
+  bold:     { id: 'bold', name: 'Bold',                 blurb: 'Heavier outlines, stronger shadow.' },
+  outline:  { id: 'outline', name: 'Outline',            blurb: 'Fill removed, line-only — schematic etching.' },
+  filled:   { id: 'filled', name: 'Filled Silhouette',  blurb: 'Stroke removed, pure silhouette with shadow.' },
+  minimal:  { id: 'minimal', name: 'Minimal Modern',    blurb: 'Hairline stroke, soft shadow — sleek modern.' },
+  ornate:   { id: 'ornate', name: 'Ornate Carved',       blurb: 'Classic + outer halo, pewter-carved look.' },
+  staunton: { id: 'staunton', name: 'Staunton Marble',   blurb: 'Real MIT-licensed Staunton geometry (3D only — 2D falls back to Classic).' },
+  'asset-pack': { id: 'asset-pack', name: 'Unknuffig / Chess3D', blurb: 'Unknuffig 2D PNGs plus Sketchfab chess3d GLTF models.' },
 }
 
 // ---- Envelope styles (Cburnett-based) ----
@@ -56,23 +49,12 @@ type StyleCfg = {
 
 const ENVELOPE_CFG: Record<string, StyleCfg> = {
   classic:  { fill: 'var', stroke: 'var', sw: 2.5, shadow: '0 1.5px 2px rgba(0,0,0,0.5)' },
-  bold:     { fill: 'var', stroke: 'var', sw: 4, shadow: '0 2px 3px rgba(0,0,0,0.65)' },
-  outline:  { fill: 'none', stroke: 'var', sw: 3, shadow: null },
-  filled:   { fill: 'var', stroke: 'none', sw: 0, shadow: '0 1.5px 2px rgba(0,0,0,0.5)' },
+  bold:     { fill: 'var', stroke: 'var', sw: 4,   shadow: '0 2px 3px rgba(0,0,0,0.65)' },
+  outline:  { fill: 'none', stroke: 'var', sw: 3,  shadow: null },
+  filled:   { fill: 'var', stroke: 'none', sw: 0,   shadow: '0 1.5px 2px rgba(0,0,0,0.5)' },
   minimal:  { fill: 'var', stroke: 'var', sw: 1.5, shadow: '0 1px 1.5px rgba(0,0,0,0.35)' },
   ornate:   { fill: 'var', stroke: 'var', sw: 2.5, outerStrokeSw: 4, shadow: '0 2px 3px rgba(0,0,0,0.55)' },
   staunton: { fill: 'var', stroke: 'var', sw: 2.5, shadow: '0 1.5px 2px rgba(0,0,0,0.5)' },
-  modern:   { fill: 'var', stroke: 'var', sw: 1.0, shadow: '0 1px 1px rgba(0,0,0,0.25)' },
-}
-
-// ---- Full-SVG art sets ----
-
-const FULL_SVG_SETS: Record<string, { pieces: Record<string, string>; viewBox: string }> = {
-  fantasy:  { pieces: fantasyPieces, viewBox: fantasyViewBox },
-  merida:   { pieces: meridaPieces, viewBox: meridaViewBox },
-  kaneo:    { pieces: kaneoPieces, viewBox: kaneoViewBox },
-  chessnut: { pieces: chessnutPieces, viewBox: chessnutViewBox },
-  rhosgfx:  { pieces: rhosgfxPieces, viewBox: rhosgfxViewBox },
 }
 
 // ---- Cburnett inner-path library (paths only; no <g> envelope) ----
@@ -122,9 +104,7 @@ function envelopeFor(sym: PieceSymbol, cfg: StyleCfg): string {
   const fill = cfg.fill === 'var'
     ? (isWhite ? 'var(--piece-fill)' : 'var(--piece-fill-2)')
     : 'none'
-  const stroke = cfg.stroke === 'var'
-    ? (isWhite ? 'var(--piece-stroke)' : 'var(--piece-stroke-2)')
-    : (isWhite ? 'var(--piece-stroke)' : 'var(--piece-stroke-2)')
+  const stroke = isWhite ? 'var(--piece-stroke)' : 'var(--piece-stroke-2)'
 
   let halo = ''
   if (cfg.outerStrokeSw && cfg.outerStrokeSw > 0) {
@@ -139,21 +119,12 @@ function envelopeFor(sym: PieceSymbol, cfg: StyleCfg): string {
   return `${halo}<svg viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"${filterStyle}><g fill="${fill}"${strokeAttr}${strokeWidthAttr} vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round">${cburnettInnerPath(sym)}</g></svg>`
 }
 
-// ---- Full-SVG art set assembly ----
-
-function fullSvgFor(sym: PieceSymbol, set: { pieces: Record<string, string>; viewBox: string }): string {
-  const key = (sym === sym.toUpperCase() ? 'w' : 'b') + sym.toUpperCase()
-  const inner = set.pieces[key] ?? ''
-  return `<svg viewBox="${set.viewBox}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${inner}</svg>`
-}
-
 // ---- Public API ----
 
 export function renderPieceSvg(sym: PieceSymbol, styleId: PieceStyleId = 'classic'): string {
-  if (styleId === 'chess3d') return renderAssetPiece(sym)
-  const fullSvg = FULL_SVG_SETS[styleId]
-  if (fullSvg) return fullSvgFor(sym, fullSvg)
+  if (styleId === 'asset-pack') return renderAssetPiece(sym)
 
   const cfg = ENVELOPE_CFG[styleId] ?? ENVELOPE_CFG.classic
+  if (!cfg) return envelopeFor(sym, ENVELOPE_CFG.classic)
   return envelopeFor(sym, cfg)
 }

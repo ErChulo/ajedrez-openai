@@ -374,7 +374,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  container-type: size;
+  container-type: inline-size;
   container-name: board;
 }
 

@@ -8,8 +8,8 @@
   --highlight-to: rgba(150, 210, 120, 0.55);
   --highlight-last: rgba(120, 170, 220, 0.35);
   --highlight-check: rgba(255, 80, 80, 0.55);
-  width: min(100cqw, 100cqh);
-  height: min(100cqw, 100cqh);
+  width: 100cqw;
+  aspect-ratio: 1;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(8, 1fr);

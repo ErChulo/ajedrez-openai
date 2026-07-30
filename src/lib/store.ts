@@ -89,7 +89,7 @@ export const useAppStore = create<AppState>()(
       setRenderMode: (mode) => set({ renderMode: mode }),
       boardTheme: 'classic' as ThemeName,
       setBoardTheme: (theme) => set({ boardTheme: theme }),
-      pieceStyle: 'chess3d' as PieceStyleId,
+      pieceStyle: 'asset-pack',
       setPieceStyle: (style) => set({ pieceStyle: style }),
       soundEnabled: true,
       setSoundEnabled: (enabled) => set({ soundEnabled: enabled }),

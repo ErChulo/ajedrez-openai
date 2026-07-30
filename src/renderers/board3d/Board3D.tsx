@@ -373,8 +373,8 @@ export function Board3D({
   const [hiddenSquares, setHiddenSquares] = useState<Square[]>([])
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Prefetch MIT Staunton STL geometries on mount
-  useEffect(() => { prefetchPieceStyleAssets(pieceStyle) }, [])
+  // Prefetch piece style assets (re-runs when pieceStyle changes)
+  useEffect(() => { prefetchPieceStyleAssets(pieceStyle) }, [pieceStyle])
 
 
   const handleSelect = useCallback((sq: Square) => {
