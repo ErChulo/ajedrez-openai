@@ -58,6 +58,7 @@ export const SquareComponent = memo(function Square({
     <div
       className={className}
       data-square={square}
+      data-testid="square"
       style={{ background }}
       onClick={onClick}
       onPointerDown={onPointerDown}

@@ -19,6 +19,7 @@ export const PieceComponent = memo(forwardRef<HTMLDivElement, PieceProps>(
         ref={ref}
         className={`${styles.piece} ${isDragging ? styles.pieceDragging : ''}`}
         data-piece={symbol}
+        data-testid="piece"
         dangerouslySetInnerHTML={{ __html: renderPieceSvg(symbol, pieceStyle) }}
       />
     )

@@ -220,11 +220,7 @@ function SceneContent({
   }, [checkSquare])
 
   useFrame((_, delta) => {
-    if (checkPulseRef.current <= 0) {
-      camera.position.lerp(baseCameraPositionRef.current, Math.min(1, delta * 4))
-      camera.lookAt(0, 0.12, 0)
-      return
-    }
+    if (checkPulseRef.current <= 0) return
 
     checkPulseRef.current = Math.max(0, checkPulseRef.current - delta * 1.7)
     const intensity = checkPulseRef.current

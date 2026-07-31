@@ -85,7 +85,7 @@ export const useAppStore = create<AppState>()(
       clockSettings: { initialSeconds: 600, incrementSeconds: 0 },
       setClockSettings: (s) => set({ clockSettings: s }),
 
-      renderMode: '3d',
+      renderMode: '2d',
       setRenderMode: (mode) => set({ renderMode: mode }),
       boardTheme: 'classic' as ThemeName,
       setBoardTheme: (theme) => set({ boardTheme: theme }),
@@ -118,6 +118,13 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'ajedrez:settings',
+      version: 1,
+      migrate: (persistedState, version) => {
+        if (version < 1) {
+          return { ...(persistedState as Record<string, unknown>), renderMode: '2d' }
+        }
+        return persistedState as Record<string, unknown>
+      },
       partialize: (state) => ({
         playerName: state.playerName,
         humanSide: state.humanSide,
