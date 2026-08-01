@@ -22,7 +22,7 @@ import type {
 import styles from './Board3D.module.css'
 
 const BOARD = { size: 4.0, squareSize: 0.5, height: 0.1, baseY: 0 }
-const PIECE_VISUAL_SCALE = 0.95
+const PIECE_VISUAL_SCALE = 1.0
 
 function fileIndex(sq: Square): number { return 'abcdefgh'.indexOf(sq[0]) }
 function rankIndex(sq: Square): number { return 8 - parseInt(sq[1], 10) }
@@ -554,14 +554,13 @@ export function Board3D({
           enableDamping
           dampingFactor={0.08}
           target={[0, 0.12, 0]}
-          minDistance={2.5}
-          maxDistance={18}
-          minPolarAngle={0.1}
-          maxPolarAngle={Math.PI / 2.05}
-          enablePan
-          panSpeed={0.5}
-          rotateSpeed={0.6}
-          zoomSpeed={1.2}
+          minDistance={3.5}
+          maxDistance={10}
+          minPolarAngle={Math.PI / 6}
+          maxPolarAngle={Math.PI / 2.8}
+          enablePan={false}
+          rotateSpeed={0.35}
+          zoomSpeed={0.8}
         />
       </Canvas>
     </div>

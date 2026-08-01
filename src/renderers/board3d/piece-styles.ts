@@ -150,9 +150,9 @@ const GLTF_PIECE_HAS_TEXTURE: Record<PieceKind, boolean> = {
 const CHESS3D_URL_BY_KIND = GLTF_URL_BY_KIND
 
 const CHESS3D_TARGET_HEIGHT_BY_KIND: Record<PieceKind, number> = {
-  p: 0.38, n: 0.58, b: 0.62, r: 0.54, q: 0.72, k: 0.78,
+  p: 0.60, n: 0.90, b: 0.95, r: 0.80, q: 1.10, k: 1.20,
 }
-const CHESS3D_MAX_FOOTPRINT = 0.5 * 0.85
+const CHESS3D_MAX_FOOTPRINT = 0.5 * 0.92
 const CHESS3D_UPRIGHT_ROTATION_BY_KIND: Partial<Record<PieceKind, { x: number; y: number; z: number }>> = {
   n: { x: -Math.PI / 2, y: 0, z: 0 },
 }

@@ -70,6 +70,63 @@ test.describe('Chess App', () => {
     expect(hasVerticalScroll).toBe(false)
   })
 
+  test('2D board fits viewport without scrolling at 1920x1080', async ({ browser }) => {
+    const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } })
+    await page.context().clearCookies()
+    await page.goto('/')
+    await page.evaluate(() => localStorage.clear())
+    await page.getByTestId('start-game-button').click()
+    await expect(page.getByTestId('board-2d')).toBeVisible()
+
+    const hasScroll = await page.evaluate(() => document.documentElement.scrollHeight > window.innerHeight)
+    expect(hasScroll).toBe(false)
+    await page.close()
+  })
+
+  test('2D board fits viewport without scrolling at 1366x768', async ({ browser }) => {
+    const page = await browser.newPage({ viewport: { width: 1366, height: 768 } })
+    await page.context().clearCookies()
+    await page.goto('/')
+    await page.evaluate(() => localStorage.clear())
+    await page.getByTestId('start-game-button').click()
+    await expect(page.getByTestId('board-2d')).toBeVisible()
+
+    const hasScroll = await page.evaluate(() => document.documentElement.scrollHeight > window.innerHeight)
+    expect(hasScroll).toBe(false)
+    await page.close()
+  })
+
+  test('2D board fits viewport without scrolling at 375x667 (mobile)', async ({ browser }) => {
+    const page = await browser.newPage({ viewport: { width: 375, height: 667 } })
+    await page.context().clearCookies()
+    await page.goto('/')
+    await page.evaluate(() => localStorage.clear())
+    await page.getByTestId('start-game-button').click()
+    await expect(page.getByTestId('board-2d')).toBeVisible()
+
+    const hasScroll = await page.evaluate(() => document.documentElement.scrollHeight > window.innerHeight)
+    expect(hasScroll).toBe(false)
+    await page.close()
+  })
+
+  test('2D board stays square at wide viewport', async ({ browser }) => {
+    const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } })
+    await page.context().clearCookies()
+    await page.goto('/')
+    await page.evaluate(() => localStorage.clear())
+    await page.getByTestId('start-game-button').click()
+    await expect(page.getByTestId('board-2d')).toBeVisible()
+
+    const ratio = await page.evaluate(() => {
+      const board = document.querySelector('[data-testid="board-2d"]') as HTMLElement
+      const r = board.getBoundingClientRect()
+      return { w: r.width, h: r.height, ratio: r.height / r.width }
+    })
+    expect(ratio.ratio).toBeGreaterThan(0.95)
+    expect(ratio.ratio).toBeLessThan(1.05)
+    await page.close()
+  })
+
   test('can switch to 3D mode from 2D', async ({ page }) => {
     await page.goto('/')
     await page.getByTestId('start-game-button').click()
