@@ -58,7 +58,14 @@ function PieceMesh({ symbol, square, position, scale, opacity, material, pieceSt
     () => buildPieceGeometry(toPieceKind(symbol), symbol, material, pieceStyle),
     [symbol, material, pieceStyle, cacheVersion],
   )
-  const displayObject = useMemo(() => geometry.clone(), [geometry])
+  const displayObject = useMemo(() => {
+    if (geometry instanceof THREE.Group) {
+      const wrapper = new THREE.Group()
+      wrapper.add(geometry)
+      return wrapper
+    }
+    return geometry.clone()
+  }, [geometry])
 
   useEffect(() => {
     return onGeometryCacheReady(() => setCacheVersion((n) => n + 1))
