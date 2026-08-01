@@ -376,6 +376,8 @@
   justify-content: center;
   container-type: size;
   container-name: board;
+  contain: size layout style;
+  overflow: hidden;
 }
 
 /* ===== 3D Full-Screen Mode ===== */

@@ -552,15 +552,15 @@ export function Board3D({
         />
         <OrbitControls
           enableDamping
-          dampingFactor={0.08}
+          dampingFactor={0.05}
           target={[0, 0.12, 0]}
-          minDistance={3.5}
-          maxDistance={10}
-          minPolarAngle={Math.PI / 6}
-          maxPolarAngle={Math.PI / 2.8}
+          minDistance={4.0}
+          maxDistance={8.0}
+          minPolarAngle={Math.PI / 4}
+          maxPolarAngle={Math.PI / 2.3}
           enablePan={false}
-          rotateSpeed={0.35}
-          zoomSpeed={0.8}
+          rotateSpeed={0.25}
+          zoomSpeed={0.6}
         />
       </Canvas>
     </div>

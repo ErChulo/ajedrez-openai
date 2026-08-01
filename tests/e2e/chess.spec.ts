@@ -138,6 +138,46 @@ test.describe('Chess App', () => {
     await expect(page.getByTestId('board-3d').locator('canvas')).toBeVisible()
   })
 
+  test('3D board renders at 1920x1080', async ({ browser }) => {
+    const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } })
+    await page.context().clearCookies()
+    await page.goto('/')
+    await page.evaluate(() => localStorage.clear())
+    await page.getByTestId('start-game-button').click()
+    await expect(page.getByTestId('board-2d')).toBeVisible()
+
+    await page.getByTestId('render-mode-toggle').click()
+    await expect(page.getByTestId('board-3d').locator('canvas')).toBeVisible()
+
+    const canvasSize = await page.evaluate(() => {
+      const canvas = document.querySelector('canvas')
+      return { w: canvas?.width, h: canvas?.height }
+    })
+    expect(canvasSize.w).toBeGreaterThan(0)
+    expect(canvasSize.h).toBeGreaterThan(0)
+    await page.close()
+  })
+
+  test('3D board renders at 375x667 (mobile)', async ({ browser }) => {
+    const page = await browser.newPage({ viewport: { width: 375, height: 667 } })
+    await page.context().clearCookies()
+    await page.goto('/')
+    await page.evaluate(() => localStorage.clear())
+    await page.getByTestId('start-game-button').click()
+    await expect(page.getByTestId('board-2d')).toBeVisible()
+
+    await page.getByTestId('render-mode-toggle').click()
+    await expect(page.getByTestId('board-3d').locator('canvas')).toBeVisible()
+
+    const canvasSize = await page.evaluate(() => {
+      const canvas = document.querySelector('canvas')
+      return { w: canvas?.width, h: canvas?.height }
+    })
+    expect(canvasSize.w).toBeGreaterThan(0)
+    expect(canvasSize.h).toBeGreaterThan(0)
+    await page.close()
+  })
+
   test('3D board has canvas element attached', async ({ page }) => {
     await page.goto('/')
     await page.getByTestId('start-game-button').click()
