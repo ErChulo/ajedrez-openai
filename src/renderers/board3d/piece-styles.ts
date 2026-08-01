@@ -150,9 +150,8 @@ const GLTF_PIECE_HAS_TEXTURE: Record<PieceKind, boolean> = {
 const CHESS3D_URL_BY_KIND = GLTF_URL_BY_KIND
 
 const CHESS3D_TARGET_HEIGHT_BY_KIND: Record<PieceKind, number> = {
-  p: 0.80, n: 1.10, b: 1.15, r: 1.00, q: 1.35, k: 1.50,
+  p: 0.55, n: 0.60, b: 0.65, r: 0.60, q: 0.70, k: 0.75,
 }
-const CHESS3D_MAX_FOOTPRINT = 0.5 * 1.0
 const CHESS3D_UPRIGHT_ROTATION_BY_KIND: Partial<Record<PieceKind, { x: number; y: number; z: number }>> = {
   n: { x: -Math.PI / 2, y: 0, z: 0 },
 }
@@ -359,9 +358,7 @@ async function loadChess3dGroup(kind: PieceKind): Promise<THREE.Group> {
     const box = new THREE.Box3().setFromObject(root)
     const size = box.getSize(new THREE.Vector3())
     const heightScale = size.y > 0 ? CHESS3D_TARGET_HEIGHT_BY_KIND[kind] / size.y : 1
-    const footprint = Math.max(size.x, size.z)
-    const footprintScale = footprint > 0 ? CHESS3D_MAX_FOOTPRINT / footprint : 1
-    root.scale.setScalar(Math.min(heightScale, footprintScale))
+    root.scale.setScalar(heightScale)
     root.updateMatrixWorld(true)
     const normalized = new THREE.Box3().setFromObject(root)
     const center = normalized.getCenter(new THREE.Vector3())

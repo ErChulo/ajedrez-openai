@@ -32,6 +32,7 @@ export function GamePage() {
     pieceStyle,
     onlineRoomCode,
   } = useAppStore()
+  const [infoPanelOpen, setInfoPanelOpen] = useState(false)
 
   const game = useGame()
   const [confirmResign, setConfirmResign] = useState(false)
@@ -123,6 +124,9 @@ export function GamePage() {
             <span className={styles.themeBadge}>{THEMES[boardTheme].label}</span>
           </div>
           <div className={styles.topBarControls}>
+            <button className={styles.iconBtnSm} data-testid="moves-toggle" onClick={() => setInfoPanelOpen(!infoPanelOpen)} title="Toggle move history" aria-label="Toggle move history">
+              ♟
+            </button>
             <button className={styles.iconBtnSm} data-testid="render-mode-toggle" onClick={toggleRenderMode} title={`Switch to ${renderMode === '2d' ? '3D' : '2D'} board`}>
               {renderMode === '2d' ? '3D' : '2D'}
             </button>
@@ -267,37 +271,45 @@ export function GamePage() {
             )}
           </div>
 
-          {/* Info panel — hidden in 3D mode */}
-          {renderMode === '2d' && (
-            <div className={styles.infoPanel}>
-              <div className={styles.panelSection}>
-                <h3>Moves</h3>
-                <MoveList history={game.snapshot?.history ?? []} />
-              </div>
+          {/* Info panel overlay */}
+          {infoPanelOpen && (
+            <div className={styles.infoPanel} data-testid="info-panel-overlay">
+              <div className={styles.infoPanelContent}>
+                <div className={styles.panelSection}>
+                  <h3>Moves</h3>
+                  <MoveList history={game.snapshot?.history ?? []} />
+                </div>
 
-              <div className={styles.panelSection}>
-                <h3>Controls</h3>
-                <div className={styles.controlsGrid}>
-                  <button
-                    className={`${styles.ctrlBtn} ${confirmResign ? styles.ctrlBtnDanger : ''}`}
-                    onClick={handleResign}
-                    disabled={game.snapshot?.status !== 'playing'}
-                  >
-                    {confirmResign ? 'Confirm?' : '🏳️ Resign'}
-                  </button>
-                  <button
-                    className={styles.ctrlBtn}
-                    onClick={game.undoMove}
-                    disabled={undoDisabled}
-                  >
-                    ↩️ Undo
-                  </button>
-                  <button
-                    className={styles.ctrlBtn}
-                    onClick={() => setSoundEnabled(!soundEnabled)}
-                  >
-                    {soundEnabled ? '🔊' : '🔇'}
-                  </button>
+                <div className={styles.panelSection}>
+                  <h3>Controls</h3>
+                  <div className={styles.controlsGrid}>
+                    <button
+                      className={`${styles.ctrlBtn} ${confirmResign ? styles.ctrlBtnDanger : ''}`}
+                      onClick={handleResign}
+                      disabled={game.snapshot?.status !== 'playing'}
+                    >
+                      {confirmResign ? 'Confirm?' : '🏳️ Resign'}
+                    </button>
+                    <button
+                      className={styles.ctrlBtn}
+                      onClick={game.undoMove}
+                      disabled={undoDisabled}
+                    >
+                      ↩️ Undo
+                    </button>
+                    <button
+                      className={styles.ctrlBtn}
+                      onClick={() => setSoundEnabled(!soundEnabled)}
+                    >
+                      {soundEnabled ? '🔊' : '🔇'}
+                    </button>
+                    <button
+                      className={styles.ctrlBtn}
+                      onClick={() => setInfoPanelOpen(false)}
+                    >
+                      ✕ Close
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
